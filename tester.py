@@ -177,7 +177,7 @@ db =  Database()
 columns = [("id", Number), "email", "firstname", "middlename", "surname", "gender", "country", "phone", "isstudent", "school", "referrer"]
 entries = [[int(y.strip()) if y.isdigit() else (y.strip() if y.strip() else Null())
             for y in x.split(",")]
-            for x in open("SampleData1.csv").read().splitlines()]
+            for x in open("test_data_1.csv").read().splitlines()]
 db.create("Table1", columns=columns, entries=entries, primarykey="id")
 
 # # db.update("Table1", {"surname": "Akinpelumi"}, record={"country": "Canada"})
