@@ -1,3 +1,5 @@
+from database.variables import *
+
 class Data:
     def check(data):
         return True
@@ -17,15 +19,34 @@ class Number(Data):
         return result
 
 class String(Data):
+    def check(data):
+        if isinstance(data, str):
+            return True
+        else:
+            return False
+        
+class Option(Data):
+    options = [Null()]
+
+    def check(data):
+        if data in Option.options:
+            return True
+        else:
+            return False
+    
+class Date(Data):
+    ...
+
+class Telephone(Data):
+    ...
+
+class Email(Data):
     ...
 
 class List(Data):
     ...
 
 class Object(Data):
-    ...
-
-class Date(Data):
     ...
 
 class Any(Data):
