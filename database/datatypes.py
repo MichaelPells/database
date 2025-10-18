@@ -1,8 +1,13 @@
 from database.variables import *
 
 class Data:
+    exceptions = [Null(), Error()] # Is `Error()` correct and working??
+
     def check(data):
         return True
+    
+    def auxcheck(data):
+        ...
     
     def cast(data):
         return data
