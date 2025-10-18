@@ -62,3 +62,17 @@ class Object(Data):
 
 class Any(Data):
     ...
+
+# Possible future types:
+# - File
+# - Binary
+# - Image
+# - Colour
+# - Fraction
+# - Percentage
+# - Degree
+# - Integer
+# - Decimal
+# - Range
+
+# The above will extend each other.
