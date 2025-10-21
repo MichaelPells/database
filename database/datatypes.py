@@ -6,9 +6,12 @@ class Data:
     def check(data):
         return True
     
-    def auxcheck(data):
-        ...
-    
+    def allow(data, exceptions):
+        if data in exceptions:
+            return True
+        else:
+            return False
+
     def cast(data):
         return data
 

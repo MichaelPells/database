@@ -263,6 +263,8 @@ class Database:
 
         if valid:
             return type.cast(data)
+        elif type.allow(data, type.exceptions):
+            return data
         else:
             raise IncompatibleTypesError(f'{data} is not of {column} type - {type.__name__}')
 
