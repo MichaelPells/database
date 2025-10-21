@@ -1,13 +1,13 @@
 from database.variables import *
 
 class Data:
-    exceptions = [Null(), Error()] # Is `Error()` correct and working??
+    exceptions = [Null, Error] # Is `Error()` correct and working??
 
     def check(data):
         return True
     
     def allow(data, exceptions):
-        if data in exceptions:
+        if type(data) in exceptions:
             return True
         else:
             return False
