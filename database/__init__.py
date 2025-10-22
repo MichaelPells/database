@@ -6,6 +6,8 @@ from database.variables import *
 from database.idioms import *
 from database.operators import *
 from database.errors import *
+import database.primitives as primitives
+
 
 class Result:
     def __init__(self, rows=[], database=None):

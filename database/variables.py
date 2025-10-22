@@ -13,10 +13,10 @@ __all__ = [
 ]
 
 from database.errors import *
-from database.primitives import *
+import database.primitives as primitives
 
-ERROR = error()
-NULL = null()
+ERROR = primitives.error()
+NULL = primitives.null()
 
 
 class Params:
@@ -101,13 +101,13 @@ class Var:
         column = params.column
         index = params.index
 
-        if type(value) == error:
+        if type(value) == primitives.error:
             if ERROR not in indexes[column]:
                 indexes[column][ERROR] = {}
 
             indexes[column][ERROR][index] = index
 
-        elif type(value) == singleton:
+        elif type(value) == primitives.singleton:
             for val in value:
                 self.register(val, params)
 
@@ -122,12 +122,12 @@ class Var:
         column = params.column
         index = params.index
 
-        if type(value) == error:
+        if type(value) == primitives.error:
             del indexes[column][ERROR][index]
             if not indexes[column][ERROR]:
                 del indexes[column][ERROR]
 
-        elif type(value) == singleton:
+        elif type(value) == primitives.singleton:
             for val in value:
                 if isinstance(val, Var):
                     val = val.compute(self.database, self.table)
@@ -202,7 +202,7 @@ class Error(Var):
         return self.database._select(self.table, column, ERROR)
     
     def compute(self, database=None, table=None):
-        return error(self.exception) # How should errors with `self.exception` be handled?
+        return primitives.error(self.exception) # How should errors with `self.exception` be handled?
 
 class Null(Var):
     def __init__(self):
@@ -269,7 +269,7 @@ class AnyOf(Var):
 
         return list(set(results[0]).union(*results[1:]))
     
-    def compute(self, database=None, table=None): # Can `null` and `error` be values here?
+    def compute(self, database=None, table=None): # Can `primitives.null` and `primitives.error` be values here?
         self.database = self.database or database
         self.table = self.table or table
 
@@ -283,12 +283,12 @@ class AnyOf(Var):
             else:
                 values = self.values.compute(self.database, self.table)
 
-                if isinstance(values, error):
+                if isinstance(values, primitives.error):
                     raise Exception(values)
-                elif isinstance(values, null):
+                elif isinstance(values, primitives.null):
                     raise ValueError(f'column has no value.') # ValueError?
 
-            curr = singleton(values)
+            curr = primitives.singleton(values)
         except Exception as exception:
             curr = Error(exception).retrieve()
 
@@ -341,9 +341,9 @@ class Values(Var):
             else:
                 column = self.column.compute(self.database, self.table)
 
-                if isinstance(column, error):
+                if isinstance(column, primitives.error):
                     raise Exception(column)
-                elif isinstance(column, null):
+                elif isinstance(column, primitives.null):
                     raise ValueError(f'column has no value.') # ValueError?
 
             curr = list(self.database.tables[self.table]['indexes'][column].keys())
@@ -424,9 +424,9 @@ class Field(Var):
             else:
                 row = self.row.compute(self.database, self.table)
 
-                if isinstance(row, error):
+                if isinstance(row, primitives.error):
                     raise Exception(row)
-                elif isinstance(row, null):
+                elif isinstance(row, primitives.null):
                     raise ValueError(f'row has no value.') # ValueError?
 
             if not isinstance(self.column, Var):
@@ -434,9 +434,9 @@ class Field(Var):
             else:
                 column = self.column.compute(self.database, self.table)
 
-                if isinstance(column, error):
+                if isinstance(column, primitives.error):
                     raise Exception(column)
-                elif isinstance(column, null):
+                elif isinstance(column, primitives.null):
                     raise ValueError(f'column has no value.') # ValueError?
 
             Table = self.database.tables[self.table]
@@ -509,9 +509,9 @@ class Formula(Var):
             else:
                 function = self.function.retrieve(self.database, self.table)
 
-                if isinstance(function, error):
+                if isinstance(function, primitives.error):
                     raise Exception(function)
-                elif isinstance(function, null):
+                elif isinstance(function, primitives.null):
                     raise ValueError(f'function has no value.') # ValueError?
 
             orderedparameters = list(self.orderedparameters)
@@ -520,9 +520,9 @@ class Formula(Var):
                 if isinstance(value, Var):
                     orderedparameters[n] = value.compute(self.database, self.table)
 
-                    if isinstance(orderedparameters[n], error):
+                    if isinstance(orderedparameters[n], primitives.error):
                         raise Exception(orderedparameters[n])
-                    elif isinstance(orderedparameters[n], null):
+                    elif isinstance(orderedparameters[n], primitives.null):
                         raise ValueError(f'Ordered parameter {n + 1} has no value.') # ValueError?
 
             namedparameters = dict(self.namedparameters)
@@ -531,9 +531,9 @@ class Formula(Var):
                 if isinstance(value, Var):
                     namedparameters[param] = value.compute(self.database, self.table)
 
-                    if isinstance(namedparameters[param], error):
+                    if isinstance(namedparameters[param], primitives.error):
                         raise Exception(namedparameters[param])
-                    elif isinstance(namedparameters[param], null):
+                    elif isinstance(namedparameters[param], primitives.null):
                         raise ValueError(f'Named parameter `{param}` has no value.') # ValueError?
 
             curr = function(*orderedparameters, **namedparameters)
@@ -592,9 +592,9 @@ class Numbers:
                 else:
                     column = self.column.compute(self.database, self.table)
 
-                    if isinstance(column, error):
+                    if isinstance(column, primitives.error):
                         raise Exception(column)
-                    elif isinstance(column, null):
+                    elif isinstance(column, primitives.null):
                         raise ValueError('column has no value.') # ValueError?
             
                 curr = max(self.database.tables[self.table]['indexes'][column])
@@ -648,9 +648,9 @@ class Numbers:
                 else:
                     column = self.column.compute(self.database, self.table)
 
-                    if isinstance(column, error):
+                    if isinstance(column, primitives.error):
                         raise Exception(column)
-                    elif isinstance(column, null):
+                    elif isinstance(column, primitives.null):
                         raise ValueError('column has no value.') # ValueError?
 
                 curr = min(self.database.tables[self.table]['indexes'][column])
@@ -704,9 +704,9 @@ class Numbers:
                 else:
                     column = self.column.compute(self.database, self.table)
 
-                    if isinstance(column, error):
+                    if isinstance(column, primitives.error):
                         raise Exception(column)
-                    elif isinstance(column, null):
+                    elif isinstance(column, primitives.null):
                         raise ValueError('column has no value.') # ValueError?
 
                 curr = sum(self.database.tables[self.table]['indexes'][column])
