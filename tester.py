@@ -269,5 +269,8 @@ db.create("Table1", columns=columns, entries=entries, primarykey="id")
 # print(result.get(row=0, column="id"))
 # print(result.count)
 
+result = db.read("Table1", OR({"firstname": "Bukola"}, {"firstname": "Soledayo"}))
+print(result.count)
+print(result.get(row=0, column="id"))
 
 # Issues:

@@ -247,7 +247,7 @@ class Database:
                 else:
                     results.append(self._selector(table, operand))
 
-            return query.process(results, table, self)
+            return query.select(results, table, self)
         
     def _identify(self, table, index):
         Table = self.tables[table]
