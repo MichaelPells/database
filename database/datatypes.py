@@ -1,7 +1,8 @@
 from database.variables import *
+from database.primitives import *
 
 class Data:
-    exceptions = [Null, Error] # Is `Error()` correct and working??
+    exceptions = [null, error] # Is `Error()` correct and working??
 
     def check(data):
         return True

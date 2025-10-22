@@ -172,9 +172,10 @@
 # print(NULL or "Yes")
 
 from database import *
+from database import primitives
 
 db =  Database()
-columns = [("id", Number), "email", "firstname", "middlename", "surname", "gender", "country", "phone", "isstudent", "school", "referrer"]
+columns = [("id", Number), ("email", String), "firstname", "middlename", "surname", "gender", "country", "phone", "isstudent", "school", "referrer"]
 entries = [[int(y.strip()) if y.isdigit() else (y.strip() if y.strip() else Null())
             for y in x.split(",")]
             for x in open("test_data_1.csv").read().splitlines()]
@@ -268,5 +269,9 @@ db.create("Table1", columns=columns, entries=entries, primarykey="id")
 # print(result.count)
 # print(result.get(row=0, column="id"))
 # print(result.count)
+
+db.update("Table1", {"id": 300}, record={"email": Null()})
+result = db.read("Table1", {"id": 300})
+print(result.get())
 
 # Issues:

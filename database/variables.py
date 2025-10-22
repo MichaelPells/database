@@ -9,16 +9,11 @@ __all__ = [
     "Values",
     "Field",
     "Formula",
-    "Numbers"
+    "Numbers",
 ]
 
-from collections import UserList
-
 from database.errors import *
-
-class error(Exception): ...
-class null: ...
-class singleton(UserList): ...
+from database.primitives import *
 
 ERROR = error()
 NULL = null()
