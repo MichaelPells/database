@@ -173,8 +173,16 @@
 
 from database import *
 
+class String1(String):
+    def check(data):
+        return data.startswith("Hel")
+    
+class String2(String):
+    def check(data):
+        return data.endswith("lo")
+
 db =  Database()
-columns = [("id", Number), ("email", String), "firstname", "middlename", "surname", "gender", "country", "phone", "isstudent", "school", "referrer"]
+columns = [("id", Number), ("email", AND(String1, String2)), "firstname", "middlename", "surname", "gender", "country", "phone", "isstudent", "school", "referrer"]
 entries = [[int(y.strip()) if y.isdigit() else (y.strip() if y.strip() else Null())
             for y in x.split(",")]
             for x in open("test_data_1.csv").read().splitlines()]
@@ -268,9 +276,5 @@ db.create("Table1", columns=columns, entries=entries, primarykey="id")
 # print(result.count)
 # print(result.get(row=0, column="id"))
 # print(result.count)
-
-result = db.read("Table1", OR({"firstname": "Bukola"}, {"firstname": "Soledayo"}))
-print(result.count)
-print(result.get(row=0, column="id"))
 
 # Issues:

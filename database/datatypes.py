@@ -15,6 +15,9 @@ class Data:
 
     def cast(data):
         return data
+    
+class Any(Data):
+    ...
 
 class Number(Data):
     def check(data):
@@ -62,9 +65,6 @@ class List(Data):
     ...
 
 class Object(Data):
-    ...
-
-class Any(Data):
     ...
 
 # Possible future types:

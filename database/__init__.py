@@ -260,13 +260,30 @@ class Database:
     def _validate(self, table, column, data):
         Table = self.tables[table]
 
-        type = Table['columns'][column]['type']
-        valid = type.check(data)
+        Type = Table['columns'][column]['type']
+
+        if not isinstance(Type, Gate):
+            valid = Type.check(data)
+        
+        else:
+            def validate(data, Type):
+                results = []
+
+                for operand in Type.operands:
+                    if not isinstance(operand, Gate):
+                        results.append(operand.check(data))
+                    else:
+                        results.append(validate(data, operand))
+
+                return Type.validate(results)
+            
+            valid = validate(data, Type)
 
         if valid:
-            return type.cast(data)
-        elif type.allow(data, type.exceptions):
+            # return Type.cast(data)
             return data
+        # elif Type.allow(data, Type.exceptions):
+        #     return data
         else:
             raise IncompatibleTypesError(f'{data} is not of {column} type - {type.__name__}')
 
