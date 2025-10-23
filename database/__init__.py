@@ -339,16 +339,16 @@ class Database:
             try:
                 self._buildindex(table)
             except IncompatibleTypesError as e:
-                self.undo()
                 e.args = (f'{e.args[0][1]} cannot be updated for entry {self._identify(table, e.args[0][0])}. {e.args[0][2]}',)
+                self.undo()
                 raise
             except InapplicableValueError as e:
-                self.undo()
                 e.args = (f'{e.args[0][1]} cannot be updated for entry {self._identify(table, e.args[0][0])}. Results in IncompatibleTypesError for {e.args[0][3]} of entry {self._identify(table, e.args[0][2])}. {e.args[0][4]}',)
+                self.undo()
                 raise
             except CyclicReferencingError as e:
-                self.undo()
                 e.args = (f'{e.args[0][1]} cannot be updated for entry {self._identify(table, e.args[0][0])}. {e.args[0][2]} references self.',)
+                self.undo()
                 raise
 
     def read(self, table=None, rows=None):
@@ -433,16 +433,16 @@ class Database:
             try:
                 self._buildindex(table, Result(rows, self), columns)
             except IncompatibleTypesError as e:
-                self.undo()
                 e.args = (f'{e.args[0][1]} cannot be updated for entry {self._identify(table, e.args[0][0])}. {e.args[0][2]}',)
+                self.undo()
                 raise
             except InapplicableValueError as e:
-                self.undo()
                 e.args = (f'{e.args[0][1]} cannot be updated for entry {self._identify(table, e.args[0][0])}. Results in IncompatibleTypesError for {e.args[0][3]} of entry {self._identify(table, e.args[0][2])}. {e.args[0][4]}',)
+                self.undo()
                 raise
             except CyclicReferencingError as e:
-                self.undo()
                 e.args = (f'{e.args[0][1]} cannot be updated for entry {self._identify(table, e.args[0][0])}. {e.args[0][2]} references self.',)
+                self.undo()
                 raise
 
     def insert(self, table=None, entries=[]):
@@ -479,16 +479,16 @@ class Database:
             try:
                 self._buildindex(table, Result(rows, self))
             except IncompatibleTypesError as e:
-                self.undo()
                 e.args = (f'{e.args[0][1]} cannot be updated for entry {self._identify(table, e.args[0][0])}. {e.args[0][2]}',)
+                self.undo()
                 raise
             except InapplicableValueError as e:
-                self.undo()
                 e.args = (f'{e.args[0][1]} cannot be updated for entry {self._identify(table, e.args[0][0])}. Results in IncompatibleTypesError for {e.args[0][3]} of entry {self._identify(table, e.args[0][2])}. {e.args[0][4]}',)
+                self.undo()
                 raise
             except CyclicReferencingError as e:
-                self.undo()
                 e.args = (f'{e.args[0][1]} cannot be updated for entry {self._identify(table, e.args[0][0])}. {e.args[0][2]} references self.',)
+                self.undo()
                 raise
 
     def delete(self, table=None):
