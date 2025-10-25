@@ -285,7 +285,11 @@ class Database:
         # elif Type.allow(data, Type.exceptions):
         #     return data
         else:
-            raise IncompatibleTypesError(f'{data} is not of {column} type - {type.__name__}')
+            try:
+                typename = Type.__name__
+            except AttributeError:
+                typename = Type
+            raise IncompatibleTypesError(f'{data} is not of {column} type - {typename}')
 
     def create(self, table=None, columns=[], entries=[], primarykey=None, primary=False): # What happens when entries contain dependent variables?
         with self.lock:
