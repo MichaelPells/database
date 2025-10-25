@@ -182,7 +182,7 @@ class String2(String):
         return data.startswith("hel")
 
 db =  Database()
-columns = [("id", Number), ("email", OR(NOT(String2), String1)), "firstname", "middlename", "surname", "gender", "country", "phone", "isstudent", "school", "referrer"]
+columns = [("id", Number), ("email", OR(String)), "firstname", "middlename", "surname", "gender", "country", "phone", "isstudent", "school", "referrer"]
 entries = [[int(y.strip()) if y.isdigit() else (y.strip() if y.strip() else Null())
             for y in x.split(",")]
             for x in open("test_data_1.csv").read().splitlines()]
@@ -276,5 +276,9 @@ db.create("Table1", columns=columns, entries=entries, primarykey="id")
 # print(result.count)
 # print(result.get(row=0, column="id"))
 # print(result.count)
+
+# String.exceptions.remove(primitives.null)
+
+db.update("Table1", {"id": 300}, record={"email": Null()})
 
 # Issues:
