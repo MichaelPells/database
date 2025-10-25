@@ -263,7 +263,7 @@ class Database:
         Type = Table['columns'][column]['type']
 
         if not isinstance(Type, Gate):
-            valid = Type.check(data)
+            valid = Type.check(data) or Type.allow(data, Type.exceptions)
         
         else:
             def validate(data, Type):
@@ -271,7 +271,7 @@ class Database:
 
                 for operand in Type.operands:
                     if not isinstance(operand, Gate):
-                        results.append(operand.check(data))
+                        results.append(operand.check(data) or operand.allow(data, operand.exceptions))
                     else:
                         results.append(validate(data, operand))
 
@@ -282,8 +282,6 @@ class Database:
         if valid:
             # return Type.cast(data)
             return data
-        # elif Type.allow(data, Type.exceptions):
-        #     return data
         else:
             try:
                 typename = Type.__name__
