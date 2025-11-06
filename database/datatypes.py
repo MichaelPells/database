@@ -5,7 +5,7 @@ class Data:
     exceptions = [primitives.null, primitives.error]
 
     def validate(data):
-        return [Data.cast]
+        return [Data]
     
     def allow(data, exceptions):
         if type(data) not in exceptions:
@@ -20,7 +20,7 @@ class Any(Data):
 class Number(Data):
     def validate(data):
         if isinstance(data, int):
-            return [Number.cast]
+            return [Number]
         else:
             raise Exception
 
@@ -31,7 +31,7 @@ class Number(Data):
 class String(Data):
     def validate(data):
         if isinstance(data, str):
-            return [String.cast]
+            return [String]
         else:
             raise Exception
         

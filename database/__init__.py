@@ -266,7 +266,7 @@ class Database:
             compatibles = Type.validate(data) # or Type.allow(data, Type.exceptions)
 
             for compatible in compatibles:
-                data = compatible(data)
+                data = compatible.cast(data)
 
             return data
         except Exception:

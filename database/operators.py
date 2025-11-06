@@ -7,15 +7,15 @@ class AND(Gate):
         return set(results[0]).intersection(*results[1:])
     
     def validate(self, data):
-        compatibles = ()
+        compatibles = []
 
         for operand in self.operands:
             try:
-                compatibles.append(*operand.validate(data))
+                compatibles.extend(operand.validate(data))
             except Exception:
                 raise Exception
             
-            return compatibles
+        return compatibles
 
 class OR(Gate):
     def select(self, results, table, database):
@@ -38,9 +38,9 @@ class NOT(Gate):
     def validate(self, data):
         try:
             self.operands[0].validate(data)
-
-            raise Exception
         except Exception:
             return []
+        
+        raise Exception
 
         

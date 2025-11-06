@@ -174,15 +174,21 @@
 from database import *
 
 class String1(String):
-    def check(data):
-        return data.startswith("Hel")
+    def validate(data):
+        if data.startswith("hel"):
+            return [String1]
+        else:
+            raise Exception
     
 class String2(String):
-    def check(data):
-        return data.startswith("hel")
+    def validate(data):
+        if data.endswith("lo"):
+            return [String2]
+        else:
+            raise Exception
 
 db =  Database()
-columns = [("id", Number), ("email", OR(String)), "firstname", "middlename", "surname", "gender", "country", "phone", "isstudent", "school", "referrer"]
+columns = [("id", Number), ("email", OR(Number, AND(NOT(Number), String2))), "firstname", "middlename", "surname", "gender", "country", "phone", "isstudent", "school", "referrer"]
 entries = [[int(y.strip()) if y.isdigit() else (y.strip() if y.strip() else Null())
             for y in x.split(",")]
             for x in open("test_data_1.csv").read().splitlines()]
