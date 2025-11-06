@@ -8,10 +8,8 @@ class Data:
         return True
     
     def allow(data, exceptions):
-        if type(data) in exceptions:
-            return True
-        else:
-            return False
+        if type(data) not in exceptions:
+            raise Exception
 
     def cast(data):
         return data
@@ -22,9 +20,9 @@ class Any(Data):
 class Number(Data):
     def check(data):
         if isinstance(data, int):
-            return True
+            return Number.cast
         else:
-            return False
+            raise Exception
 
     def cast(data):
         result = int(data)
