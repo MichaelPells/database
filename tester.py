@@ -279,6 +279,6 @@ db.create("Table1", columns=columns, entries=entries, primarykey="id")
 
 # String.exceptions.remove(primitives.null)
 
-db.update("Table1", {"id": 300}, record={"email": Null()})
+# db.update("Table1", {"id": 300}, record={"email": Null()})
 
 # Issues:

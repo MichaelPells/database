@@ -262,27 +262,14 @@ class Database:
 
         Type = Table['columns'][column]['type']
 
-        if not isinstance(Type, Gate):
-            valid = Type.validate(data) or Type.allow(data, Type.exceptions)
-        
-        else:
-            def validate(data, Type):
-                results = []
+        try:
+            compatibles = Type.validate(data) # or Type.allow(data, Type.exceptions)
 
-                for operand in Type.operands:
-                    if not isinstance(operand, Gate):
-                        results.append(operand.validate(data) or operand.allow(data, operand.exceptions))
-                    else:
-                        results.append(validate(data, operand))
+            for compatible in compatibles:
+                data = compatible(data)
 
-                return Type.validate(results)
-            
-            valid = validate(data, Type)
-
-        if valid:
-            # return Type.cast(data)
             return data
-        else:
+        except Exception:
             try:
                 typename = Type.__name__
             except AttributeError:
