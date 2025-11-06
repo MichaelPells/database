@@ -4,7 +4,7 @@ import database.primitives as primitives
 class Data:
     exceptions = [primitives.null, primitives.error]
 
-    def check(data):
+    def validate(data):
         return True
     
     def allow(data, exceptions):
@@ -18,7 +18,7 @@ class Any(Data):
     ...
 
 class Number(Data):
-    def check(data):
+    def validate(data):
         if isinstance(data, int):
             return Number.cast
         else:
@@ -29,7 +29,7 @@ class Number(Data):
         return result
 
 class String(Data):
-    def check(data):
+    def validate(data):
         if isinstance(data, str):
             return True
         else:
@@ -38,7 +38,7 @@ class String(Data):
 class Option(Data):
     options = [Null()]
 
-    def check(data):
+    def validate(data):
         if data in Option.options:
             return True
         else:
