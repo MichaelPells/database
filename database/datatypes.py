@@ -2,7 +2,15 @@ from database.variables import *
 import database.primitives as primitives
 
 class Data:
-    exceptions = [primitives.null, primitives.error]
+    def __init__(self, validate=None, exceptions=None, cast=None):
+        if validate != None:
+            self.validate = validate
+
+        if cast != None:
+            self.cast = cast
+
+        if exceptions != None:
+            self.exceptions = exceptions
 
     def validate(data):
         return [Data]
@@ -14,19 +22,35 @@ class Data:
     def cast(data):
         return data
     
+    exceptions = [primitives.null, primitives.error]
+
+
 class Any(Data):
     ...
 
-class Number(Data):
-    def validate(data):
-        if isinstance(data, int):
-            return [Number]
-        else:
-            raise Exception
 
-    def cast(data):
-        result = int(data)
-        return result
+def validate(data):
+    if isinstance(data, int):
+        return [Number]
+    else:
+        raise Exception
+
+def cast(data):
+    result = int(data)
+    return result
+
+Number = Data(validate, cast)
+
+# class Number(Data):
+#     def validate(data):
+#         if isinstance(data, int):
+#             return [Number]
+#         else:
+#             raise Exception
+
+#     def cast(data):
+#         result = int(data)
+#         return result
 
 class String(Data):
     def validate(data):
