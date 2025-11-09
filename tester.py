@@ -173,19 +173,8 @@
 
 from database import *
 
-class String1(String):
-    def validate(data):
-        if data.startswith("hel"):
-            return [String1]
-        else:
-            raise Exception
-    
-class String2(String):
-    def validate(data):
-        if data.endswith("lo"):
-            return [String2]
-        else:
-            raise Exception
+String1 = Data(lambda data: data.startswith("hel"))
+String2 = Data(lambda data: data.endswith("lo"))
 
 db =  Database()
 columns = [("id", Number), ("email", OR(Number, AND(NOT(Number), String2))), "firstname", "middlename", "surname", "gender", "country", "phone", "isstudent", "school", "referrer"]
