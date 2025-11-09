@@ -2,7 +2,7 @@ from database.variables import *
 import database.primitives as primitives
 
 class Data:
-    def __init__(self, check=None, exceptions=None, cast=None):
+    def __init__(self, check=None, exceptions=None, cast=None, **build):
         if check != None:
             self.check = check
 
@@ -11,6 +11,16 @@ class Data:
 
         if exceptions != None:
             self.exceptions = exceptions
+
+        for name, obj in build.items():
+            self.__setattr__(name, obj)
+
+    def __call__(self, check=None, exceptions=None, cast=None, **build):
+        check = check or self.check
+        exceptions = exceptions or self.exceptions
+        cast = cast or self.cast
+
+        return Data(check, exceptions, cast, **build)
 
     def check(self, data):
         return True
@@ -34,36 +44,16 @@ class Data:
 Any = Data()
 Number = Data(lambda data: isinstance(data, int))
 String = Data(lambda data: isinstance(data, str))
-        
-class Option(Data):
-    options = [Null()]
-
-    def validate(data):
-        if data in Option.options:
-            return True
-        else:
-            return False
-    
-class Date(Data):
-    ...
-
-class Time(Data):
-    ...
-
-class DateTime(Data):
-    ...
-
-class Telephone(Data):
-    ...
-
-class Email(Data):
-    ...
-
-class List(Data):
-    ...
-
-class Object(Data):
-    ...
+Option = Data(lambda data: data in Option.options,
+              options = [Null()]
+              )
+Date = Data()
+Time = Data()
+DateTime = Data()
+Telephone = Data()
+Email = Data()
+List = Data()
+Object = Data()
 
 # Possible future types:
 # - File

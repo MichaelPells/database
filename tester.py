@@ -175,9 +175,11 @@ from database import *
 
 String1 = Data(lambda data: data.startswith("hel"))
 String2 = Data(lambda data: data.endswith("lo"))
+Gender = Option(options=["Male", "Female", "Other"])
+print(Gender.options)
 
 db =  Database()
-columns = [("id", Number), ("email", OR(Number, AND(NOT(Number), String2))), "firstname", "middlename", "surname", "gender", "country", "phone", "isstudent", "school", "referrer"]
+columns = [("id", Number), ("email", String), "firstname", "middlename", "surname", ("gender", Gender), "country", "phone", "isstudent", "school", "referrer"]
 entries = [[int(y.strip()) if y.isdigit() else (y.strip() if y.strip() else Null())
             for y in x.split(",")]
             for x in open("test_data_1.csv").read().splitlines()]
