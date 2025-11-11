@@ -21,19 +21,15 @@ class Data:
         cast = cast or self.cast
 
         return Data(check, exceptions, cast, **build)
-
-    def check(self, data):
-        return True
-
+    
     def validate(self, data):
-        if self.check(data):
+        if self.check(data, self) or type(data) in self.exceptions:
             return [self]
         else:
             raise Exception
-    
-    def allow(self, data, exceptions):
-        if type(data) not in exceptions:
-            raise Exception
+
+    def check(self, data, Type):
+        return True
 
     def cast(self, data):
         return data
@@ -42,9 +38,9 @@ class Data:
 
 
 Any = Data()
-Number = Data(lambda data: isinstance(data, int))
-String = Data(lambda data: isinstance(data, str))
-Option = Data(lambda data: data in Option.options,
+Number = Data(lambda data, Type: isinstance(data, int))
+String = Data(lambda data, Type: isinstance(data, str))
+Option = Data(lambda data, Type: data in Type.options,
               options = [Null()]
               )
 Date = Data()

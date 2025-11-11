@@ -173,10 +173,9 @@
 
 from database import *
 
-String1 = Data(lambda data: data.startswith("hel"))
-String2 = Data(lambda data: data.endswith("lo"))
+String1 = Data(lambda data, Type: data.startswith("hel"))
+String2 = Data(lambda data, Type: data.endswith("lo"))
 Gender = Option(options=["Male", "Female", "Other"])
-print(Gender.options)
 
 db =  Database()
 columns = [("id", Number), ("email", String), "firstname", "middlename", "surname", ("gender", Gender), "country", "phone", "isstudent", "school", "referrer"]

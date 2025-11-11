@@ -263,7 +263,7 @@ class Database:
         Type = Table['columns'][column]['type']
 
         try:
-            compatibles = Type.validate(data) # or Type.allow(data, Type.exceptions)
+            compatibles = Type.validate(data)
 
             for compatible in compatibles:
                 data = compatible.cast(data)
