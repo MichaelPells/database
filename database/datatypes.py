@@ -2,7 +2,7 @@ from database.variables import *
 import database.primitives as primitives
 
 class Data:
-    def __init__(self, check=None, exceptions=None, cast=None, **build):
+    def __init__(self, check=None, cast=None, exceptions=None, **build):
         if check != None:
             self.check = check
 
@@ -15,18 +15,24 @@ class Data:
         for name, obj in build.items():
             self.__setattr__(name, obj)
 
-    def __call__(self, check=None, exceptions=None, cast=None, **build):
+    def __call__(self, check=None, cast=None, exceptions=None, **build):
         check = check or self.check
-        exceptions = exceptions or self.exceptions
         cast = cast or self.cast
+        exceptions = exceptions or self.exceptions
 
-        return Data(check, exceptions, cast, **build)
+        return Data(check, cast, exceptions, **build)
     
     def validate(self, data):
         if self.check(data, self) or type(data) in self.exceptions:
             return [self]
         else:
             raise Exception
+        
+    def sanitize(self, data):
+        if type(data) not in self.exceptions:
+            data = self.cast(data)
+
+        return data
 
     def check(self, data, Type):
         return True
