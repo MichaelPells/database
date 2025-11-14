@@ -176,6 +176,8 @@ from database import *
 String1 = Data(lambda data, Type: data.startswith("hel"))
 String2 = Data(lambda data, Type: data.endswith("lo"))
 Gender = Option(options=["Male", "Female", "Other"])
+print(Option.__dict__)
+print(Gender.__dict__)
 
 db =  Database()
 columns = [("id", Number), ("email", String), "firstname", "middlename", "surname", ("gender", Gender), "country", "phone", "isstudent", "school", "referrer"]

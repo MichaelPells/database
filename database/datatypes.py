@@ -23,8 +23,9 @@ class Data:
             exceptions=exceptions,
             **build)
 
-        if newrule != None: subtype.rules.append(newrule)
-        if rule != None: subtype.rules = [rule]
+        subtype.rules = self.rules
+        if newrule: subtype.rules.append(newrule)
+        if rule: subtype.rules = [rule]
         subtype.prototypes.append(self)
 
         return subtype
