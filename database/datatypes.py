@@ -2,28 +2,35 @@ from database.variables import *
 import database.primitives as primitives
 
 class Data:
-    def __init__(self, check=None, cast=None, exceptions=None, **build):
-        if check != None:
-            self.check = check
+    def __init__(self, rule=None, cast=None, exceptions=None, **build):
+        self.prototypes = []
+        self.rules = [rule] if rule else []
+        if cast: self.cast = cast
+        self.exceptions = exceptions or [primitives.null, primitives.error]
 
-        if cast != None:
-            self.cast = cast
-
-        if exceptions != None:
-            self.exceptions = exceptions
-
+        self.builds = []
         for name, obj in build.items():
             self.__setattr__(name, obj)
+            self.builds.append(name)
 
-    def __call__(self, check=None, cast=None, exceptions=None, **build):
-        check = check or self.check
+    def __call__(self, newrule=None, rule=None, cast=None, exceptions=None, **build):
         cast = cast or self.cast
         exceptions = exceptions or self.exceptions
+        build = {**{name: self.__getattribute__(name) for name in self.builds}, **build}
 
-        return Data(check, cast, exceptions, **build)
+        subtype = Data(
+            cast=cast,
+            exceptions=exceptions,
+            **build)
+
+        if newrule != None: subtype.rules.append(newrule)
+        if rule != None: subtype.rules = [rule]
+        subtype.prototypes.append(self)
+
+        return subtype
     
     def validate(self, data):
-        if self.check(data, self) or type(data) in self.exceptions:
+        if not False in [rule(data, self) for rule in self.rules] or type(data) in self.exceptions:
             return [self]
         else:
             raise Exception
@@ -34,13 +41,8 @@ class Data:
 
         return data
 
-    def check(self, data, Type):
-        return True
-
     def cast(self, data):
         return data
-    
-    exceptions = [primitives.null, primitives.error]
 
 
 Any = Data()
