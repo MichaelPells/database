@@ -5,7 +5,7 @@ class Data:
     def __init__(self, rule=None, cast=None, exceptions=None, **build):
         self.prototypes = []
         self.rules = [rule] if rule else []
-        if cast: self.cast = cast
+        self.casts = [cast] if cast else []
         self.exceptions = exceptions or [primitives.null, primitives.error]
 
         self.builds = []
@@ -13,19 +13,22 @@ class Data:
             self.__setattr__(name, obj)
             self.builds.append(name)
 
-    def __call__(self, newrule=None, rule=None, cast=None, exceptions=None, **build):
-        cast = cast or self.cast
+    def __call__(self, newrule=None, rule=None, newcast=None, cast=None, exceptions=None, **build):
         exceptions = exceptions or self.exceptions
         build = {**{name: self.__getattribute__(name) for name in self.builds}, **build}
 
         subtype = Data(
-            cast=cast,
             exceptions=exceptions,
             **build)
 
         subtype.rules = self.rules
         if newrule: subtype.rules.append(newrule)
         if rule: subtype.rules = [rule]
+
+        subtype.casts = self.casts
+        if newcast: subtype.rules.append(newcast)
+        if cast: subtype.casts = [cast]
+
         subtype.prototypes.append(self)
 
         return subtype
@@ -38,11 +41,9 @@ class Data:
         
     def sanitize(self, data):
         if type(data) not in self.exceptions:
-            data = self.cast(data)
+            for cast in self.casts:
+                data = cast(data)
 
-        return data
-
-    def cast(self, data):
         return data
 
 

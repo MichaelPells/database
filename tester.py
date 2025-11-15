@@ -174,7 +174,7 @@
 from database import *
 
 String1 = Data(lambda data, Type: data.startswith("hel"))
-String2 = Data(lambda data, Type: data.endswith("lo"))
+String2 = Data(rule=lambda data, Type: data.endswith("lo"))
 Gender = Option(options=["Male", "Female", "Other"])
 
 db =  Database()
