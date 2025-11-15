@@ -47,11 +47,20 @@ class Data:
 
 
 Any = Data()
-Number = Data(lambda data, Type: isinstance(data, int))
-String = Data(lambda data, Type: isinstance(data, str))
-Option = Data(lambda data, Type: data in Type.options,
-              options = [Null()]
-              )
+
+Number = Data(
+    rule=lambda data, Type: isinstance(data, int)
+    )
+
+String = Data(
+    rule=lambda data, Type: isinstance(data, str)
+    )
+
+Option = Data(
+    rule=lambda data, Type: data in Type.options,
+    options = [Null()]
+    )
+
 Date = Data()
 Time = Data()
 DateTime = Data()
