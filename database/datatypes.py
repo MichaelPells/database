@@ -1,4 +1,4 @@
-from database.variables import *
+# from database.variables import *
 import database.primitives as primitives
 
 class Data:
@@ -59,7 +59,7 @@ String = Data(
 
 Option = Data(
     rule=lambda data, Type: data in Type.options,
-    options = [Null()]
+    options = [] # Null()
     )
 
 Date = Data()

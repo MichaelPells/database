@@ -184,6 +184,8 @@ entries = [[int(y.strip()) if y.isdigit() else (y.strip() if y.strip() else Null
             for x in open("test_data_1.csv").read().splitlines()]
 db.create("Table1", columns=columns, entries=entries, primarykey="id")
 
+Numbers.max("age", db, "Table1")
+
 # # db.update("Table1", {"surname": "Akinpelumi"}, record={"country": "Canada"})
 # db.update("Table1", NOT({"country": Var.any(["Nigeria", "NIGERIA", "Nigerian", "nigeria"])}), {"country": Var.NULL})
 # result = db.read("Table1", {"country": Var.any([Var.NULL, "nigeria"])})

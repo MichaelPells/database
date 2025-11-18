@@ -14,6 +14,7 @@ __all__ = [
 
 from database.errors import *
 import database.primitives as primitives
+from database.datatypes import *
 
 ERROR = primitives.error()
 NULL = primitives.null()
@@ -28,6 +29,16 @@ class Params:
 class Const: ...
 
 class Var:
+    def validate(self):
+        errors = {}
+        for column, datatype in self.requirements.items():
+            if self.database.tables[self.table]['columns'][column]['type'] is not datatype:
+                errors[column] = datatype
+
+        if errors:
+            raise Exception(errors)
+
+
     def index(self, database=None, table=None, params=Params()):
         self.database = self.database or database
         self.table = self.table or table
@@ -556,6 +567,12 @@ class Numbers:
             self.table = table
 
             self.column = column
+
+            self.requirements = {
+            column: Number
+            }
+            self.validate()
+
             self.references = {}
             self.referenced = False
             self.stored = False
