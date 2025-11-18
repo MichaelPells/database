@@ -31,7 +31,10 @@ class Const: ...
 class Var:
     def validate(self):
         errors = {}
-        for column, datatype in self.requirements.items():
+
+        for param, datatype in self.requirements.items():
+            column = self.__dict__[param]
+
             if self.database.tables[self.table]['columns'][column]['type'] is not datatype:
                 errors[column] = datatype
 
@@ -562,15 +565,16 @@ class Formula(Var):
 
 class Numbers:
     class max(Var):
+        requirements = { # Find the actual term later - not just 'requirement'.
+            "column": Number
+            }
+
         def __init__(self, column, database=None, table=None):
             self.database = database
             self.table = table
 
             self.column = column
 
-            self.requirements = {
-            column: Number
-            }
             self.validate()
 
             self.references = {}
@@ -624,6 +628,10 @@ class Numbers:
             return curr
 
     class min(Var):
+        requirements = { # Find the actual term later - not just 'requirement'.
+            "column": Number
+            }
+
         def __init__(self, column, database=None, table=None):
             self.database = database
             self.table = table
@@ -680,6 +688,10 @@ class Numbers:
             return curr
 
     class sum(Var):
+        requirements = { # Find the actual term later - not just 'requirement'.
+            "column": Number
+            }
+
         def __init__(self, column, database=None, table=None):
             self.database = database
             self.table = table
