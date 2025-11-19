@@ -1,4 +1,3 @@
-# from database.variables import *
 import database.primitives as primitives
 
 class Data:
