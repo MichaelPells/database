@@ -35,7 +35,7 @@ class Var:
         for param, datatype in self.requirements.items():
             column = self.__dict__[param]
 
-            if self.database.tables[self.table]['columns'][column]['type'] is not datatype:
+            if self.database.tables[self.table]['columns'][column]['type'] is not datatype and datatype not in self.database.tables[self.table]['columns'][column]['type'].prototypes:
                 errors[column] = datatype
 
         if errors:
