@@ -15,6 +15,7 @@ __all__ = [
 from database.errors import *
 import database.primitives as primitives
 from database.datatypes import *
+from database.operators import *
 
 ERROR = primitives.error()
 NULL = primitives.null()
@@ -32,11 +33,14 @@ class Var:
     def validate(self):
         errors = {}
 
-        for param, datatype in self.requirements.items():
+        for param, requiredtype in self.requirements.items():
             column = self.__dict__[param]
 
-            if self.database.tables[self.table]['columns'][column]['type'] is not datatype and datatype not in self.database.tables[self.table]['columns'][column]['type'].prototypes:
-                errors[column] = datatype
+            actualtype = self.database.tables[self.table]['columns'][column]['type']
+
+            if not isinstance(requiredtype, Gate):
+                if actualtype is not requiredtype and requiredtype not in actualtype.prototypes:
+                    errors[column] = requiredtype
 
         if errors:
             raise Exception(errors)
