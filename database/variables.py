@@ -55,7 +55,14 @@ class Var:
                     for requiredtypechild in requiredtype:
                         for actualtypechild in actualtype:
                             if actualtypechild is requiredtypechild or requiredtypechild in actualtypechild.prototypes: break
-                        errors[column] = requiredtype
+                        else:
+                            errors[column] = requiredtype
+
+                    for actualtypechild in actualtype:
+                        for requiredtypechild in requiredtype:
+                            if requiredtypechild is actualtypechild or actualtypechild in requiredtypechild.prototypes: break
+                        else:
+                            errors[column] = requiredtype
 
         if errors:
             raise Exception(errors)

@@ -178,7 +178,7 @@ String2 = Data(rule=lambda data, Type: data.endswith("lo"))
 Gender = Option(options=["Male", "Female", "Other"])
 
 db =  Database()
-columns = [("id", Number), ("email", String), "firstname", "middlename", "surname", ("gender", Gender), "country", "phone", "isstudent", "school", "referrer"]
+columns = [("id", AND(Number, Number)), ("email", String), "firstname", "middlename", "surname", ("gender", Gender), "country", "phone", "isstudent", "school", "referrer"]
 entries = [[int(y.strip()) if y.isdigit() else (y.strip() if y.strip() else Null())
             for y in x.split(",")]
             for x in open("test_data_1.csv").read().splitlines()]
