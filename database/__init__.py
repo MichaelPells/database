@@ -238,7 +238,7 @@ class Database:
         if isinstance(query, Compound):
             results = []
 
-            for operand in query.operands:
+            for operand in query:
                 if type(operand) == dict:
                     queries = operand
 

@@ -2,6 +2,10 @@ class Compound:
     def __init__(self, *operands):
         self.operands = operands
 
+    def __iter__(self):
+        for operand in self.operands:
+            yield operand
+
 class AND(Compound):
     def select(self, results, table, database):
         return set(results[0]).intersection(*results[1:])
@@ -9,7 +13,7 @@ class AND(Compound):
     def validate(self, data):
         compatibles = []
 
-        for operand in self.operands:
+        for operand in self:
             try:
                 compatibles.extend(operand.validate(data))
             except Exception:
@@ -22,7 +26,7 @@ class OR(Compound):
         return set(results[0]).union(*results[1:])
     
     def validate(self, data):
-        for operand in self.operands:
+        for operand in self:
             try:
                 return operand.validate(data)
             except Exception:

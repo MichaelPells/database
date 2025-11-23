@@ -33,36 +33,43 @@ class Var:
     def validate(self):
         errors = {}
 
-        for param, requiredtype in self.requirements.items():
+        for param, allowedtypes in self.requirements.items():
             column = self.__dict__[param]
 
-            actualtype = self.database.tables[self.table]['columns'][column]['type']
+            for requiredtype in allowedtypes:
+                error = False
+                actualtype = self.database.tables[self.table]['columns'][column]['type']
 
-            if not isinstance(requiredtype, Compound): # Simple
-                if not isinstance(actualtype, Compound):  # Simple
-                    if actualtype is not requiredtype and requiredtype not in actualtype.prototypes:
-                        errors[column] = requiredtype
-                else: # Compound
-                    for actualtypechild in actualtype:
-                        if actualtypechild is not requiredtype and requiredtype not in actualtypechild.prototypes:
-                            errors[column] = requiredtype
-            else: # Compound
-                if not isinstance(actualtype, Compound):  # Simple
-                    for requiredtypechild in requiredtype:
-                        if actualtype is not requiredtypechild and requiredtypechild not in actualtype.prototypes:
-                            errors[column] = requiredtype
-                else: # Compound
-                    for requiredtypechild in requiredtype:
+                if not isinstance(requiredtype, Compound): # Simple
+                    if not isinstance(actualtype, Compound):  # Simple
+                        if actualtype is not requiredtype and requiredtype not in actualtype.prototypes:
+                            error = True
+                    else: # Compound
                         for actualtypechild in actualtype:
-                            if actualtypechild is requiredtypechild or requiredtypechild in actualtypechild.prototypes: break
-                        else:
-                            errors[column] = requiredtype
-
-                    for actualtypechild in actualtype:
+                            if actualtypechild is not requiredtype and requiredtype not in actualtypechild.prototypes:
+                                error = True
+                else: # Compound
+                    if not isinstance(actualtype, Compound):  # Simple
                         for requiredtypechild in requiredtype:
-                            if requiredtypechild is actualtypechild or actualtypechild in requiredtypechild.prototypes: break
-                        else:
-                            errors[column] = requiredtype
+                            if actualtype is not requiredtypechild and requiredtypechild not in actualtype.prototypes:
+                                error = True
+                    else: # Compound
+                        for requiredtypechild in requiredtype:
+                            for actualtypechild in actualtype:
+                                if actualtypechild is requiredtypechild or requiredtypechild in actualtypechild.prototypes: break
+                            else:
+                                error = True
+
+                        for actualtypechild in actualtype:
+                            for requiredtypechild in requiredtype:
+                                if requiredtypechild is actualtypechild or actualtypechild in requiredtypechild.prototypes: break
+                            else:
+                                error = True
+
+                if not error:
+                    break
+            else:
+                errors[column] = allowedtypes
 
         if errors:
             raise Exception(errors)
@@ -592,7 +599,7 @@ class Formula(Var):
 class Numbers:
     class max(Var):
         requirements = { # Find the actual term later - not just 'requirement'.
-            "column": Number
+            "column": [Number]
             }
 
         def __init__(self, column, database=None, table=None):
@@ -655,7 +662,7 @@ class Numbers:
 
     class min(Var):
         requirements = { # Find the actual term later - not just 'requirement'.
-            "column": Number
+            "column": [Number]
             }
 
         def __init__(self, column, database=None, table=None):
@@ -715,7 +722,7 @@ class Numbers:
 
     class sum(Var):
         requirements = { # Find the actual term later - not just 'requirement'.
-            "column": Number
+            "column": [Number]
             }
 
         def __init__(self, column, database=None, table=None):
