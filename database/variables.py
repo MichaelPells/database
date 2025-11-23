@@ -38,8 +38,8 @@ class Var:
 
             actualtype = self.database.tables[self.table]['columns'][column]['type']
 
-            if not isinstance(requiredtype, Gate): # Simple
-                if not isinstance(actualtype, Gate):  # Simple
+            if not isinstance(requiredtype, Compound): # Simple
+                if not isinstance(actualtype, Compound):  # Simple
                     if actualtype is not requiredtype and requiredtype not in actualtype.prototypes:
                         errors[column] = requiredtype
                 else: # Compound
@@ -47,7 +47,7 @@ class Var:
                         if actualtypechild is not requiredtype and requiredtype not in actualtypechild.prototypes:
                             errors[column] = requiredtype
             else: # Compound
-                if not isinstance(actualtype, Gate):  # Simple
+                if not isinstance(actualtype, Compound):  # Simple
                     for requiredtypechild in requiredtype:
                         if actualtype is not requiredtypechild and requiredtypechild not in actualtype.prototypes:
                             errors[column] = requiredtype

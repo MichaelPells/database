@@ -235,7 +235,7 @@ class Database:
             column, value = list(query.items())[0]
             return self._select(table=table, column=column, value=value)
         
-        if isinstance(query, Gate):
+        if isinstance(query, Compound):
             results = []
 
             for operand in query.operands:

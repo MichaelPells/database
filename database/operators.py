@@ -1,8 +1,8 @@
-class Gate:
+class Compound:
     def __init__(self, *operands):
         self.operands = operands
 
-class AND(Gate):
+class AND(Compound):
     def select(self, results, table, database):
         return set(results[0]).intersection(*results[1:])
     
@@ -17,7 +17,7 @@ class AND(Gate):
             
         return compatibles
 
-class OR(Gate):
+class OR(Compound):
     def select(self, results, table, database):
         return set(results[0]).union(*results[1:])
     
@@ -30,7 +30,7 @@ class OR(Gate):
 
         raise Exception
 
-class NOT(Gate):
+class NOT(Compound):
     def select(self, results, table, database):
         superset = database.tables[table]['entries'].keys()
         return set(superset).difference(results[0])
