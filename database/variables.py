@@ -40,29 +40,53 @@ class Var:
                 error = False
                 actualtype = self.database.tables[self.table]['columns'][column]['type']
 
-                if not isinstance(requiredtype, Compound): # Simple
-                    if not isinstance(actualtype, Compound):  # Simple
+                if not isinstance(requiredtype, Compound): # `requiredtype` is Simple
+                    if not isinstance(actualtype, Compound):  # `actualtype` is Simple
                         if actualtype is not requiredtype and requiredtype not in actualtype.prototypes:
                             error = True
-                    else: # Compound
+                    else: # `actualtype` is Compound
                         for actualtypechild in actualtype:
-                            if actualtypechild is not requiredtype and requiredtype not in actualtypechild.prototypes:
-                                error = True
-                else: # Compound
-                    if not isinstance(actualtype, Compound):  # Simple
+                            if not isinstance(actualtypechild, Compound): # child is Simple
+                                if actualtypechild is not requiredtype and requiredtype not in actualtypechild.prototypes:
+                                    error = True
+                            else: # child is Compound
+                                ...
+                else: # `requiredtype` is Compound
+                    if not isinstance(actualtype, Compound):  # `actualtype` is Simple
                         for requiredtypechild in requiredtype:
-                            if actualtype is not requiredtypechild and requiredtypechild not in actualtype.prototypes:
-                                error = True
-                    else: # Compound
+                            if not isinstance(requiredtypechild, Compound): # child is Simple
+                                if actualtype is not requiredtypechild and requiredtypechild not in actualtype.prototypes:
+                                    error = True
+                            else: # child is Compound
+                                ...
+                    else: # `actualtype` is Compound
                         for requiredtypechild in requiredtype:
                             for actualtypechild in actualtype:
-                                if actualtypechild is requiredtypechild or requiredtypechild in actualtypechild.prototypes: break
+                                if not isinstance(requiredtypechild, Compound): # child is Simple
+                                    if not isinstance(actualtypechild, Compound): # child is Simple
+                                        if actualtypechild is requiredtypechild or requiredtypechild in actualtypechild.prototypes: break
+                                    else: # child is Compound
+                                        ...
+                                else: # child is Compound
+                                    if not isinstance(actualtypechild, Compound): # child is Simple
+                                        ...
+                                    else: # child is Compound
+                                        ...
                             else:
                                 error = True
 
                         for actualtypechild in actualtype:
                             for requiredtypechild in requiredtype:
-                                if requiredtypechild is actualtypechild or actualtypechild in requiredtypechild.prototypes: break
+                                if not isinstance(requiredtypechild, Compound): # child is Simple
+                                    if not isinstance(actualtypechild, Compound): # child is Simple
+                                        if requiredtypechild is actualtypechild or actualtypechild in requiredtypechild.prototypes: break
+                                    else: # child is Compound
+                                        ...
+                                else: # child is Compound
+                                    if not isinstance(actualtypechild, Compound): # child is Simple
+                                        ...
+                                    else: # child is Compound
+                                        ...
                             else:
                                 error = True
 
