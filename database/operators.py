@@ -2,6 +2,10 @@ class Compound:
     def __init__(self, *operands):
         self.operands = operands
 
+    def __getitem__(self, index):
+        return self.operands[index]
+
+
     def __iter__(self):
         for operand in self.operands:
             yield operand
@@ -41,7 +45,7 @@ class NOT(Compound):
 
     def validate(self, data):
         try:
-            self.operands[0].validate(data)
+            self[0].validate(data)
         except Exception:
             return []
         
