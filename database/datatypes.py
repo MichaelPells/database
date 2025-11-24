@@ -49,15 +49,15 @@ class Data:
 Any = Data()
 
 Number = Data(
-    rule=lambda data, Type: isinstance(data, int)
+    rule=lambda data, Type: isinstance(data, int), name="Number"
     )
 
 String = Data(
-    rule=lambda data, Type: isinstance(data, str)
+    rule=lambda data, Type: isinstance(data, str), name="String"
     )
 
 Option = Data(
-    rule=lambda data, Type: data in Type.options,
+    rule=lambda data, Type: data in Type.options, name="Option",
     options = [] # Null()
     )
 
