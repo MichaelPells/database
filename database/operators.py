@@ -25,6 +25,9 @@ class AND(Compound):
             
         return compatibles
 
+    def match(self, errors):
+        return not False in errors
+
 class OR(Compound):
     def select(self, results, table, database):
         return set(results[0]).union(*results[1:])
@@ -37,6 +40,9 @@ class OR(Compound):
                 pass
 
         raise Exception
+    
+    def match(self, errors):
+        return True in errors
 
 class NOT(Compound):
     def select(self, results, table, database):

@@ -46,7 +46,8 @@ class Var:
                     for actualtypechild in actualtype:
                         errors.append(compare(requiredtype, actualtypechild))
 
-                    error = not False in errors
+                    error = actualtype.match(errors)
+                    print(error)
             else: # `requiredtype` is Compound
                 if not isinstance(actualtype, Compound):  # `actualtype` is Simple: Compound, Simple
                     errors = []
@@ -71,7 +72,7 @@ class Var:
             for requiredtype in allowedtypes:
                 actualtype = self.database.tables[self.table]['columns'][column]['type']
 
-                error = compare(requiredtype, actualtype) or compare(actualtype, requiredtype)
+                error = compare(requiredtype, actualtype)
 
                 if not error:
                     break
@@ -606,7 +607,7 @@ class Formula(Var):
 class Numbers:
     class max(Var):
         requirements = { # Find the actual term later - not just 'requirement'.
-            "column": [Number]
+            "column": [OR(Number, String)]
             }
 
         def __init__(self, column, database=None, table=None):

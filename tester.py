@@ -176,13 +176,14 @@ from database import *
 String1 = Data(lambda data, Type: data.startswith("hel"))
 String2 = Data(rule=lambda data, Type: data.endswith("lo"))
 Gender = Option(options=["Male", "Female", "Other"])
+Number2 = Number()
 
 db = Database()
-columns = [("id", Number), ("email", String), "firstname", "middlename", "surname", ("gender", Gender), "country", "phone", "isstudent", "school", "referrer"]
-entries = [[int(y.strip()) if y.isdigit() else (y.strip() if y.strip() else Null())
-            for y in x.split(",")]
-            for x in open("test_data_1.csv").read().splitlines()]
-db.create("Table1", columns=columns, entries=entries, primarykey="id")
+columns = [("id", OR(Number, String)), ("email", String), "firstname", "middlename", "surname", ("gender", Gender), "country", "phone", "isstudent", "school", "referrer"]
+# entries = [[int(y.strip()) if y.isdigit() else (y.strip() if y.strip() else Null())
+#             for y in x.split(",")]
+#             for x in open("test_data_1.csv").read().splitlines()]
+db.create("Table1", columns=columns, entries=[], primarykey="id")
 
 Numbers.max("id", db, "Table1")
 
