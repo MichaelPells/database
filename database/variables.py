@@ -33,7 +33,7 @@ class Var:
     def validate(self):
         errors = {}
 
-        def compare(requiredtype, actualtype):
+        def compare(requiredtype, actualtype, rule=()):
             error = False
 
             if not isinstance(requiredtype, Compound): # `requiredtype` is Simple
@@ -46,7 +46,13 @@ class Var:
                     for actualtypechild in actualtype:
                         errors.append(compare(requiredtype, actualtypechild))
 
-                    error = actualtype.match(errors)
+                    if rule:
+                        if type(rule[0]) == type(rule[1]):
+                            matcher = AND()
+                        else:
+                            matcher = actualtype
+
+                    error = matcher.match(errors)
                     print(error)
             else: # `requiredtype` is Compound
                 if not isinstance(actualtype, Compound):  # `actualtype` is Simple: Compound, Simple
@@ -60,7 +66,7 @@ class Var:
                     errors = []
 
                     for requiredtypechild in requiredtype:
-                        errors.append(compare(requiredtypechild, actualtype))
+                        errors.append(compare(requiredtypechild, actualtype, (requiredtype, actualtype)))
 
                     error = True in errors
 
