@@ -53,7 +53,6 @@ class Var:
                             matcher = actualtype
 
                     error = matcher.match(errors)
-                    print(error)
             else: # `requiredtype` is Compound
                 if not isinstance(actualtype, Compound):  # `actualtype` is Simple: Compound, Simple
                     errors = []
