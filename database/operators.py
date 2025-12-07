@@ -57,4 +57,6 @@ class NOT(Compound):
         
         raise Exception
 
+    def match(self, errors):
+        return not errors[0]
         

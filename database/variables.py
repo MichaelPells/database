@@ -46,11 +46,10 @@ class Var:
                     for actualtypechild in actualtype:
                         errors.append(compare(requiredtype, actualtypechild))
 
-                    if rule:
-                        if type(rule[0]) == type(rule[1]):
-                            matcher = AND()
-                        else:
-                            matcher = actualtype
+                    if (rule and type(rule[0]) != type(rule[1])) or type(actualtype) == NOT:
+                        matcher = actualtype
+                    else:
+                        matcher = AND()
 
                     error = matcher.match(errors)
             else: # `requiredtype` is Compound
@@ -60,14 +59,24 @@ class Var:
                     for requiredtypechild in requiredtype:
                         errors.append(compare(requiredtypechild, actualtype))
 
-                    error = True in errors
+                    if type(requiredtype) == NOT:
+                        matcher = requiredtype
+                    else:
+                        matcher = OR()
+
+                    error = matcher.match(errors)
                 else: # `actualtype` is Compound: Compound, Compound
                     errors = []
 
                     for requiredtypechild in requiredtype:
                         errors.append(compare(requiredtypechild, actualtype, (requiredtype, actualtype)))
 
-                    error = True in errors
+                    if type(requiredtype) == NOT:
+                        matcher = requiredtype
+                    else:
+                        matcher = OR()
+
+                    error = matcher.match(errors)
 
             return error
 
@@ -612,7 +621,7 @@ class Formula(Var):
 class Numbers:
     class max(Var):
         requirements = { # Find the actual term later - not just 'requirement'.
-            "column": [OR(Number, String)]
+            "column": [NOT(Number)]
             }
 
         def __init__(self, column, database=None, table=None):
