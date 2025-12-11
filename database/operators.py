@@ -58,7 +58,3 @@ class NOT(Statement):
             return []
         
         raise Exception
-
-    def match(self, errors):
-        return not errors[0]
-        

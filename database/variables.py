@@ -53,10 +53,10 @@ class Var:
                     for actualtypechild in actualtype:
                         errors.append(compare(requiredtype, actualtypechild))
 
-                    if (rule and type(rule[0]) != type(rule[1])) or type(actualtype) == NOT:
-                        matcher = actualtype
+                    if rule and type(rule[0]) == type(rule[1]):
+                            matcher = AND()
                     else:
-                        matcher = AND()
+                        matcher = actualtype
 
                     error = matcher.match(errors)
             else: # `requiredtype` is Compound
@@ -66,24 +66,14 @@ class Var:
                     for requiredtypechild in requiredtype:
                         errors.append(compare(requiredtypechild, actualtype))
 
-                    if type(requiredtype) == NOT:
-                        matcher = requiredtype
-                    else:
-                        matcher = OR()
-
-                    error = matcher.match(errors)
+                    error = True in errors
                 else: # `actualtype` is Compound: Compound, Compound
                     errors = []
 
                     for requiredtypechild in requiredtype:
                         errors.append(compare(requiredtypechild, actualtype, (requiredtype, actualtype)))
 
-                    if type(requiredtype) == NOT:
-                        matcher = requiredtype
-                    else:
-                        matcher = OR()
-
-                    error = matcher.match(errors)
+                    error = True in errors
 
             return error
 
