@@ -1,14 +1,16 @@
-class Compound:
+class Statement:
     def __init__(self, *operands):
         self.operands = operands
 
     def __getitem__(self, index):
         return self.operands[index]
-
-
+    
     def __iter__(self):
         for operand in self.operands:
             yield operand
+
+class Compound(Statement):
+    ...
 
 class AND(Compound):
     def select(self, results, table, database):
@@ -44,7 +46,7 @@ class OR(Compound):
     def match(self, errors):
         return True in errors
 
-class NOT(Compound):
+class NOT(Statement):
     def select(self, results, table, database):
         superset = database.tables[table]['entries'].keys()
         return set(superset).difference(results[0])
