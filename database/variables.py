@@ -38,7 +38,14 @@ class Var:
 
             if not isinstance(requiredtype, Compound): # `requiredtype` is Simple
                 if not isinstance(actualtype, Compound):  # `actualtype` is Simple: Simple, Simple
-                    if actualtype is not requiredtype and requiredtype not in actualtype.prototypes:
+                    if type(actualtype) == type(requiredtype):
+                        if isinstance(requiredtype, Statement):
+                            requiredtype = requiredtype[0]
+                            actualtype = actualtype[0]
+
+                        if actualtype is not requiredtype and requiredtype not in actualtype.prototypes:
+                            error = True
+                    else:
                         error = True
                 else: # `actualtype` is Compound: Simple, Compound
                     errors = []
