@@ -1,12 +1,11 @@
 import threading
 import copy
 
-from database.datatypes import *
-from database.variables import *
-from database.idioms import *
-from database.operators import *
-from database.errors import *
-import database.primitives as primitives
+from .datatypes import *
+from .variables import *
+from .idioms import *
+from .operators import *
+from .errors import *
 
 
 class Result:

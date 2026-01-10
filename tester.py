@@ -172,6 +172,8 @@
 # print(NULL or "Yes")
 
 from database import *
+primitives
+errors
 
 String1 = Data(lambda data, Type: data.startswith("hel"))
 String2 = Data(rule=lambda data, Type: data.endswith("lo"))
@@ -185,7 +187,9 @@ columns = [("id", NOT(OR(Number, String))), ("email", String), "firstname", "mid
 #             for x in open("test_data_1.csv").read().splitlines()]
 db.create("Table1", columns=columns, entries=[], primarykey="id")
 
-Numbers.max("id", db, "Table1")
+# Numbers.max("id", db, "Table1")
+
+
 
 # # db.update("Table1", {"surname": "Akinpelumi"}, record={"country": "Canada"})
 # db.update("Table1", NOT({"country": Var.any(["Nigeria", "NIGERIA", "Nigerian", "nigeria"])}), {"country": Var.NULL})
